@@ -1,0 +1,17 @@
+QT.compositor.VERSION = 5.3.0
+QT.compositor.MAJOR_VERSION = 5
+QT.compositor.MINOR_VERSION = 3
+QT.compositor.PATCH_VERSION = 0
+QT.compositor.name = QtCompositor
+QT.compositor.libs = $$QT_MODULE_LIB_BASE
+QT.compositor.rpath = /usr/lib
+QT.compositor.includes = $$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/QtCompositor
+QT.compositor.bins = $$QT_MODULE_BIN_BASE
+QT.compositor.libexecs = $$QT_MODULE_LIBEXEC_BASE
+QT.compositor.plugins = $$QT_MODULE_PLUGIN_BASE
+QT.compositor.imports = $$QT_MODULE_IMPORT_BASE
+QT.compositor.qml = $$QT_MODULE_QML_BASE
+QT.compositor.depends = core gui
+QT.compositor.module_config =
+QT.compositor.DEFINES = QT_COMPOSITOR_LIB QT_COMPOSITOR_WAYLAND_GL
+QT_MODULES += compositor

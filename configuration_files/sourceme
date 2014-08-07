@@ -1,0 +1,9 @@
+#wayland.sourceme
+WLD=$HOME/projects/Wayland_For_IMX6/rootfs_mount/  # change this to another location if you prefer
+LD_LIBRARY_PATH=$WLD/lib
+PKG_CONFIG_PATH=$WLD/lib/pkgconfig/:$WLD/share/pkgconfig/
+ACLOCAL="aclocal -I $WLD/share/aclocal"
+PATH=$WLD/bin:$PATH
+XDG_RUNTIME_DIR=/tmp
+ 
+export WLD LD_LIBRARY_PATH PKG_CONFIG_PATH ACLOCAL PATH XDG_RUNTIME_DIR

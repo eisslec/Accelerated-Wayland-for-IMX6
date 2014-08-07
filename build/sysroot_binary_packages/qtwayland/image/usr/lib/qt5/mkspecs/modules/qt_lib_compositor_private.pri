@@ -1,0 +1,9 @@
+QT.compositor_private.VERSION = 5.3.0
+QT.compositor_private.MAJOR_VERSION = 5
+QT.compositor_private.MINOR_VERSION = 3
+QT.compositor_private.PATCH_VERSION = 0
+QT.compositor_private.name = QtCompositor
+QT.compositor_private.libs = $$QT_MODULE_LIB_BASE
+QT.compositor_private.includes = $$QT_MODULE_INCLUDE_BASE/QtCompositor/5.3.0 $$QT_MODULE_INCLUDE_BASE/QtCompositor/5.3.0/QtCompositor
+QT.compositor_private.depends = compositor
+QT.compositor_private.module_config = internal_module no_link

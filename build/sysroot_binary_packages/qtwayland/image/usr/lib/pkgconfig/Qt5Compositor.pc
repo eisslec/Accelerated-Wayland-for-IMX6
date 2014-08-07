@@ -1,0 +1,14 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/qt5
+
+
+Name: Qt5 Compositor
+Description: Qt Compositor module
+Version: 5.3.0
+Libs: -L${libdir} -lQt5Compositor 
+Libs.private: -lQt5Quick -lQt5Qml -lQt5Network -lQt5Gui -lQt5Core -lpthread -lwayland-server -lxkbcommon -lGLESv2 -lEGL -lGAL  
+Cflags: -I${includedir}/QtCompositor -I${includedir}
+Requires: Qt5Core Qt5Gui
+

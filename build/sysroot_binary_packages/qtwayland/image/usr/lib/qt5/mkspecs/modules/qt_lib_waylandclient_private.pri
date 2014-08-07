@@ -1,0 +1,9 @@
+QT.waylandclient_private.VERSION = 5.3.0
+QT.waylandclient_private.MAJOR_VERSION = 5
+QT.waylandclient_private.MINOR_VERSION = 3
+QT.waylandclient_private.PATCH_VERSION = 0
+QT.waylandclient_private.name = QtWaylandClient
+QT.waylandclient_private.libs = $$QT_MODULE_LIB_BASE
+QT.waylandclient_private.includes = $$QT_MODULE_INCLUDE_BASE/QtWaylandClient/5.3.0 $$QT_MODULE_INCLUDE_BASE/QtWaylandClient/5.3.0/QtWaylandClient
+QT.waylandclient_private.depends = waylandclient platformsupport_private
+QT.waylandclient_private.module_config = internal_module no_link

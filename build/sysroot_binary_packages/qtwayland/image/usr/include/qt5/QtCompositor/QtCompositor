@@ -1,0 +1,14 @@
+#ifndef QT_QTCOMPOSITOR_MODULE_H
+#define QT_QTCOMPOSITOR_MODULE_H
+#include <QtCompositor/QtCompositorDepends>
+#include "qwaylandcompositor.h"
+#include "qwaylanddrag.h"
+#include "qwaylandinput.h"
+#include "qwaylandinputpanel.h"
+#include "qwaylandsurface.h"
+#include "qwaylandsurfaceitem.h"
+#include "qwaylandexport.h"
+#include "qwaylandresourcecollection.h"
+#include "waylandwindowmanagerintegration.h"
+#include "qtcompositorversion.h"
+#endif

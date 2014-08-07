@@ -1,0 +1,17 @@
+QT.waylandclient.VERSION = 5.3.0
+QT.waylandclient.MAJOR_VERSION = 5
+QT.waylandclient.MINOR_VERSION = 3
+QT.waylandclient.PATCH_VERSION = 0
+QT.waylandclient.name = QtWaylandClient
+QT.waylandclient.libs = $$QT_MODULE_LIB_BASE
+QT.waylandclient.rpath = /usr/lib
+QT.waylandclient.includes = $$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/QtWaylandClient
+QT.waylandclient.bins = $$QT_MODULE_BIN_BASE
+QT.waylandclient.libexecs = $$QT_MODULE_LIBEXEC_BASE
+QT.waylandclient.plugins = $$QT_MODULE_PLUGIN_BASE
+QT.waylandclient.imports = $$QT_MODULE_IMPORT_BASE
+QT.waylandclient.qml = $$QT_MODULE_QML_BASE
+QT.waylandclient.depends = core gui
+QT.waylandclient.module_config =
+QT.waylandclient.DEFINES = QT_WAYLANDCLIENT_LIB
+QT_MODULES += waylandclient
