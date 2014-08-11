@@ -1,0 +1,37 @@
+Author: Christian Eissler
+
+About the project
+===================================
+Description:
+This project can be used to automatically create a Yocto based
+image with Wayland, Qt, QtWayland plugin, Graphic support(OpenGL, OpenVG), QtWebkit, (Accelerated HTML5).
+It can also generate a Qt SDK which is compatible with the image.
+
+Goal of the project is to run a QtWebkit based application with hardware acceleration under Wayland.
+This gives the opportunity to run WebApps(Html5, Javascript, WebGl) with a Wayland compositor. 
+
+Quick Start Guide
+====================================
+
+Command parameters:
+Add parameter to create the Qt SDK
+--create_Qt_SDK
+
+Set repository branch of Yocto which should be used. the "daisy" branch works accurate and is tested by me.
+--yocto_branch=daisy
+
+Build a Weston Yocto image with a compatible Qt SDK
+./build.sh --yocto_branch=daisy --create_Qt_SDK 
+
+The image build by the script is located in $PROJECT_DIR/build/images.
+It can be copied to the SD card using:
+
+sudo dd if=$PROJECT_DIR/build/images/core-image-weston-nitrogen6x.rootfs.sdcard of=/dev/$DEVICE_NAME
+
+
+The Qt SDK is located in /opt/poky/.
+To integarte the SDK into the Qt Creator follow the step 4.) in the manual-build-documentation.txt which is located under Documentation
+
+
+For testing Wayland, graphical functionality and QtWebkit follow the step 5.)
+

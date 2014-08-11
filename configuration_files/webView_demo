@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides: weston
+# Required-Start: $local_fs $remote_fs
+# Required-Stop: $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+killproc() {
+        pid=`/bin/pidof $1`
+        [ "$pid" != "" ] && kill $pid
+}
+
+case "$1" in
+  start)
+       /usr/bin/test/webView_widget/webView_widget -platform wayland-egl -tty=/dev/pts/0
+  ;;
+
+  stop)
+        echo "Stopping webView_widget"
+        killproc webView_widget
+  ;;
+
+  restart)
+	$0 stop
+        sleep 1
+        $0 start
+  ;;
+
+  *)
+        echo "usage: $0 { start | stop | restart }"
+  ;;
+esac
+
+exit 0

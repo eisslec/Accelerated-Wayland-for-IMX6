@@ -1,8 +1,7 @@
 Accelerated Wayland on IMX6
 
 Description:
-Manual build description
-Build a Yocto system with Wayland, Qt, QtWayland plugin,Graphic support, QtWebkit, Accelerated HTML5
+Build a Yocto based image with Wayland, Qt, QtWayland plugin,Graphic support, QtWebkit, (Accelerated HTML5)
 
 Created by: Christian Eissler
 Last change: 05.06.2014
@@ -12,26 +11,30 @@ Cross-Compile System: Ubuntu x86
 ##########################################################################################################
 ##########################################################################################################
 
-#Create the project folder
-mkdir $projectFolder
+#Go into the project folder
 cd $projectFolder
 
 #Create temp folder
 mkdir temp
-cd temp
 
-#######################Installing required tools###################################
+
+
+1.) #######################Installing required tools#######################################################
+
 #Install build tools on the Host system
 sudo apt-get install build-essential git autoconf automake libtool
 sudo apt-get install nfs-kernel-server
 sudo apt-get install crossbuild-essential-armhf
 sudo apt-get install gcc-arm-linux-gnueabihf
+sudo apt-get install lzop
 
-#Get the toolchain
-wget http://releases.linaro.org/14.06/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.9-2014.06_linux.tar.xz
+#Get the toolchain (Not nessecery)
+#wget http://releases.linaro.org/14.06/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.9-2014.06_linux.tar.xz
 
-########################Creating Yocto Build with Qt Integration########################################
-mkdir src
+
+
+2.) ########################Creating Yocto Build with Qt Integration########################################
+
 cd src
 mkdir yocto
 cd yocto
@@ -45,12 +48,12 @@ cd source
 git clone -b daisy https://github.com/meta-qt5/meta-qt5.git
 cd ..
 
-#Configure the yocto build
-MACHINE=nitrogen6x . setup-environment build
-
+#Copy the yocto configuration
 cp ../../configuration_files/local.conf build/conf/
 cp ../../configuration_files/bblayers.conf build/conf/
 
+#Configure the yocto build
+MACHINE=nitrogen6x ./setup-environment build
 
 #Building the image
 bitbake core-image-weston
@@ -63,26 +66,17 @@ sudo cp -r tmp/work/cortexa9hf-vfp-neon-poky-linux-gnueabi/qtwayland/5.2.1+gitAU
 
 sudo cp -r tmp/work/cortexa9hf-vfp-neon-poky-linux-gnueabi/qtwebkit-examples/5.2.1-r0/image/* /media/$PARTITION_NAME/
 
-#Check if the image boot up
 
-#Qt examples are under /usr/share/qt5/examples
-#Test a qt application with wayland plugin for example
-./qt3d/cube -platform wayland-egl
-
-#If you start the application from a remote console and not from the wayland console you must
-#add the right tty device to the arguments like
- ./qt3d/cube -platform wayland-egl -tty=/dev/pts/0
-
-# Weston can be controlled with the script
-/etc/init.d/weston start | stop | restart
-
-######################################################################################################################
-################################IMX6 Qt Creator integration###########################################################
-#Install qtcreator
-sudo apt-get install qtcreator 
+3.) ################################IMX6 Build Qt SDK###########################################################
 
 bitbake meta-toolchain-qt5
 sudo ./tmp/deploy/sdk/poky-eglibc-i686-meta-toolchain-qt5-cortexa9hf-vfp-neon-toolchain-1.6.1.sh
+
+
+4.) #####################################Setup Qt Creator################################################################
+
+#Install qtcreator
+sudo apt-get install qtcreator 
 
 #Go to QCreator folder
 nano $QtCreatorDir/qtcreator.sh
@@ -95,7 +89,7 @@ source /opt/poky/1.6.1/environment-setup-cortexa9hf-vfp-neon-poky-linux-gnueabi
 #Start QtCreator
 #Go to Tools/Options/Build & Run/
 
-In tab Qt Versions add:
+#In tab Qt Versions add:
 #Select qmake in directory /opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/qt5/ and set name "Qt IMX6"
 
 #In tab Compilers add:
@@ -116,11 +110,44 @@ In tab Qt Versions add:
 #Sysroot = /opt/poky/1.6.1/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi
 #Compiler = IMX6 Compiler
 #Debugger = IMX6 Debugger
-Qt version = QtIMX6
+#Qt version = QtIMX6
 
-#Test Webkit project under Wayland Weston(Open project with QtCreator
 
-$projectFolder/src/QtWebkit_Test/QtWebkit_Test.pro
+
+5.) ###############################Testing####################################################
+#Testing after starting the image on the target
+
+#Create SSH connection therfore the IP Adress is needed
+PATH+=:/sbin/
+ifconfig
+
+#Change password to root
+passwd
+
+#Test ssh connection from host
+ssh root@$IP_ADRESS
+
+
+
+
+#The Weston compositor can be controlled with the script
+/etc/init.d/weston start | stop | restart
+
+
+#Qt examples are under /usr/share/qt5/examples
+#Test a graphic accelerated Qt application with wayland plugin for example
+./qt3d/cube -platform wayland-egl
+
+#If you start the application from a remote console and not from the wayland console you must
+#add the right tty device to the arguments like
+ ./qt3d/cube -platform wayland-egl -tty=/dev/pts/0
+
+
+
+
+#Test Webkit projects from host system using Qt Creator
+
+$projectFolder/src/webView_widget/webView_widget.pro
 
 #Check the Run Configuration in the project settings
 #Run application with arguments: -platform wayland-egl -tty=/dev/pts/0
@@ -130,78 +157,10 @@ QT_QPA_EGLFS_PHYSICAL_HEIGHT=480
 QT_QPA_EGLFS_PHYSICAL_WIDTH=800
 XDG_RUNTIME_DIR=/run/user/root
 
-###################################################################################
 
 
 
-
-
-
-
-
-
-
-#Mount image
-#file -s images/core-image-weston-nitrogen6x-20140611090419.rootfs.sdcard 
-#sudo mount images/core-image-weston-nitrogen6x-20140611090419.rootfs.sdcard  rootfs_mount/ -o offset=$((24576*512))
-
-
-#######################Creating Qt###################################
-
-git clone https://git.gitorious.org/qt/qt5.git qt5 -b 5.3
-
-./configure -opensource -confirm-license -make libs -device imx6 -device-option CROSS_COMPILE=/opt/linaro-toolchain/bin/arm-linux-gnueabihf- -sysroot $HOME/projects/Wayland_For_IMX6/src/yocto/build/tmp/sysroots/nitrogen6x -prefix $HOME/projects/Wayland_For_IMX6/build/qt_build -no-pch -no-opengl -no-xcb -opengl es2 -v -compile-examples
-
-
-git clone https://git.gitorious.org/qt/qtjsbackend.git
-
-
-git clone git://github.com/OSSystems/meta-browser.git
-
-
-
-
-#Create SSH connection
-PATH+=:/sbin/
-ifconfig
-
-#Change password to root
-passwd
-
-
-ssh root@$IP_ADRESS
-
-
-
-
-
-
-
-
-
-git clone git://gitorious.org/cross-compile-tools/cross-compile-tools.git
-
-
-
-sudo apt-get install libxcb1 libxcb1-dev libx11-xcb1 libx11-xcb-dev libxcb-keysyms1 libxcb-keysyms1-dev libxcb-image0 libxcb-image0-dev libxcb-shm0 libxcb-shm0-dev libxcb-icccm4 libxcb-icccm4-dev libxcb-sync0 libxcb-sync0-dev libxcb-render-util0 libxcb-render-util0-dev libxcb-xfixes0-dev libxrender-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-glx0-dev
-
-$ sudo apt-get install libxkbcommon-dev libudev-dev libwayland-dev libpng12-dev libjpeg8-dev libmtdev-dev autotools-dev autoconf automake bison flex libasound2-dev libxext-dev x11proto-xext-dev libxcursor-dev libxfixes-dev x11proto-fixes-dev libffi-dev libsm-dev libxcomposite-dev
-
-
-openvt -s -- /usr/share/qt5/examples/qwayland/qml-compositor/qml-compositor -platform eglfs
-
-
-
-
-./configure -opensource -confirm-license -make libs -device imx6 -device-option CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- -sysroot $HOME/projects/Wayland_For_IMX6/src/yocto/build/tmp/sysroots/nitrogen6x -prefix $HOME/projects/Wayland_For_IMX6/build/qt_build -no-pch -no-opengl -opengl es2 -v -optimized-qmake -release
-
-
-
-/home/ceissler/projects/Wayland_For_IMX6/src/yocto/build/tmp/work/i686-nativesdk-pokysdk-linux/nativesdk-qtbase/5.2.1-r1/package/opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/qt5/qmake
-#
-
-
-###########Testing################################################
+#Test a QWayland compositor
 
 #On the device go to the examples
 cd /usr/share/qt5/examples/qtwayland/
@@ -212,27 +171,64 @@ export XDG_RUNTIME_DIR=/run/user/root
 
 export QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
 
-
+#QWindow Compositor
 ./qwindow-compositor/qwindow-compositor -platform eglfs -tty=/dev/tty1 &
 
-./cube -platform wayland-egl -tty=/dev/pts/0
+#or Qml Compositor
+./qml-compositor/qml-compositor -platform eglfs -tty=/dev/tty1 &
+
+#Starting an opengl test application on the compsoitor
+./cube -platform wayland-egl -tty=/dev/tty1
+
+
+#The compositor can also be started into an virtual console
+openvt -s -- ./qml-compositor/qml-compositor -platform eglfs -tty=/dev/tty1 &
+
+#Starting an opengl test application on the compsoitor
+../qt3d/cube -platform wayland-egl -tty=/dev/pts/0
+
+
+########################Additonal build Documentation (Not tested successfully!!!)#########################################
+###########################################################################################################################
+
+#######################################Additonal setup################################################
 
 #Setup the system time and the rtc 
 date --set="15:34:00"
 hwclock --systohc
 
+#######################Manual Creating Qt###################################
+cd src
 
-weston –tty=1 –use-gl=0
+git clone https://git.gitorious.org/qt/qt5.git qt5 -b 5.3
 
-####################################################################################
+./configure -opensource -confirm-license -make libs -device imx6 -device-option CROSS_COMPILE=/opt/linaro-toolchain/bin/arm-linux-gnueabihf- -sysroot $HOME/projects/Wayland_For_IMX6/src/yocto/build/tmp/sysroots/nitrogen6x -prefix $HOME/projects/Wayland_For_IMX6/build/qt_build -no-pch -no-opengl -no-xcb -opengl es2 -v -compile-examples
+
+git clone https://git.gitorious.org/qt/qtjsbackend.git
+
+
+##########################Build the kernel##########################################################
+
 export LOADADDR=10008000
+
+#Configure the kernel
 make ARCH=arm CROSS_COMPILE=/opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi- nitrogen6x_defconfig
 
-
+#Build the kernel, modules and the device tree blob
 make -j4 ARCH=arm CROSS_COMPILE=/opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi- uImage modules dtbs
 
+#Write the kernel modules to an specific location
 make ARCH=arm CROSS_COMPILE=/opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi- INSTALL_MOD_PATH=output modules_install
-sudo apt-get install lzop
+
+
+########################################################################################################
+
+
+
+
+
+
+
 
 
 

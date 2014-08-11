@@ -23,10 +23,10 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    //QWebView webView;
-    //webView.load(QUrl("http://google.de"));
+    QWebView webView;
+    webView.load(QUrl("http://google.de"));
     //webView.load(QUrl("http://localhost/tabletDemo/src"));
-    //webView.show();
+    webView.showFullScreen();
 
     //qDebug() << view->page();
     //inspector->setPage(view->page());
@@ -43,27 +43,30 @@ int main(int argc, char * argv[])
     //glwidget->show();
 
 
-    const int width = 1000;
-    const int height = 600;
-    QWebSettings::globalSettings()->setAttribute(QWebSettings::AcceleratedCompositingEnabled, true);
-    QGraphicsScene scene;
 
 
 
-    QGraphicsView view(&scene);
-    view.setFrameShape(QFrame::NoFrame);
-    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+//    const int width = 1000;
+//    const int height = 600;
+//    QWebSettings::globalSettings()->setAttribute(QWebSettings::AcceleratedCompositingEnabled, true);
+//    QGraphicsScene scene;
 
-    QGraphicsWebView webview;
-    webview.resize(width, height);
-    webview.load(QUrl("http://google.de"));
 
-    scene.addItem(&webview);
 
-    view.resize(width, height);
-    view.show();
+//    QGraphicsView view(&scene);
+//    view.setFrameShape(QFrame::NoFrame);
+//    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+
+//    QGraphicsWebView webview;
+//    webview.resize(width, height);
+//    webview.load(QUrl("http://google.de"));
+
+//    scene.addItem(&webview);
+
+//    view.resize(width, height);
+//    view.show();
 
 
     return app.exec();
