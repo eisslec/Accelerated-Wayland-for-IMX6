@@ -8,11 +8,12 @@
 ##########################################################################################################
 echo Install development tools
 
-export SOURCE_DIR=$PWD"/src"
-export CONFIGURATION_DIR=$PWD"/configuration_files"
-export BUILD_DIR=$PWD"/build"
-export TEMP_DIR=$PWD"/temp"
-export SCRIPT_DIR=$PWD"/scripts"
+export PROJECT_DIR=$PWD
+export SOURCE_DIR=$PROJECT_DIR"/src"
+export CONFIGURATION_DIR=$PROJECT_DIR"/configuration_files"
+export BUILD_DIR=$PROJECT_DIR"/build"
+export TEMP_DIR=$PROJECT_DIR"/temp"
+export SCRIPT_DIR=$PROJECT_DIR"/scripts"
 
 export yocto_branch=daisy
 export create_Qt_SDK=false
@@ -36,8 +37,18 @@ mkdir temp
 mkdir build/images
 
 #Install build tools on the Host system
-sudo apt-get install build-essential git autoconf automake libtool nfs-kernel-server crossbuild-essential-armhf lzop
+sudo apt-get install build-essential git autoconf automake libtool nfs-kernel-server lzop
 
+
+PATH=$PATH:$PROJECT_DIR/tools
+#Install the repo application if not available
+if [ ! -f $PROJECT_DIR/tools/repo ]; then 
+
+	mkdir $PROJECT_DIR/tools
+	curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > $PROJECT_DIR/tools/repo
+	chmod a+x $PROJECT_DIR/tools/repo
+
+fi
 
 ########################Creating Yocto Build with Qt Integration########################################
 echo Creating Yocto Build with Qt Integratio
