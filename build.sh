@@ -37,7 +37,11 @@ mkdir temp
 mkdir build/images
 
 #Install build tools on the Host system
+<<<<<<< HEAD
+sudo apt-get install build-essential git autoconf automake libtool nfs-kernel-server lzop gpref
+=======
 sudo apt-get install build-essential git autoconf automake libtool nfs-kernel-server lzop
+>>>>>>> 8545042539e6f752074f10ac3a1c918022a7988f
 
 
 PATH=$PATH:$PROJECT_DIR/tools
@@ -66,12 +70,12 @@ cd sources
 git clone -b $yocto_branch https://github.com/meta-qt5/meta-qt5.git
 cd ..
 
-#Copy the yocto configuration
-cp $CONFIGURATION_DIR/local.conf build/conf/
-cp $CONFIGURATION_DIR/bblayers.conf build/conf/
-
 #Configure the yocto build
-MACHINE=nitrogen6x ./setup-environment build
+MACHINE=nitrogen6x . ./setup-environment build
+
+#Copy the yocto configuration
+cp $CONFIGURATION_DIR/local.conf conf/
+cp $CONFIGURATION_DIR/bblayers.conf conf/
 
 #Building the image(Takes long time)
 bitbake core-image-weston
@@ -88,8 +92,8 @@ export offset_image="$(sudo $SCRIPT_DIR/mount_Image.sh $BUILD_DIR/images/core-im
 
 sudo mount core-image-weston-nitrogen6x.rootfs.sdcard $mount_dir -o offset=offset_image
 
-sudo cp -r $CONFIGURATION_DIR/sysroot_binary_packages/qtwebkit-examples/image/* $mount_dir
-sudo cp -r $CONFIGURATION_DIR/sysroot_binary_packages/qtwebkit-examples/image/* $mount_dir
+#sudo cp -r $CONFIGURATION_DIR/sysroot_binary_packages/qtwebkit-examples/image/* $mount_dir
+#sudo cp -r $CONFIGURATION_DIR/sysroot_binary_packages/qtwayland/image/* $mount_dir
 
 sudo umount $mount_dir
 

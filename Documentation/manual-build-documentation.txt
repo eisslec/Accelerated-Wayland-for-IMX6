@@ -27,6 +27,7 @@ sudo apt-get install nfs-kernel-server
 sudo apt-get install crossbuild-essential-armhf
 sudo apt-get install gcc-arm-linux-gnueabihf
 sudo apt-get install lzop
+sudo apt-get install gpref
 
 #Get the toolchain (Not nessecery)
 #wget http://releases.linaro.org/14.06/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.9-2014.06_linux.tar.xz
@@ -43,17 +44,19 @@ cd yocto
 repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b daisy
 repo sync
 
+repo start daisy_custom --all
+
 #Creating the meta Qt5 repository
 cd source
 git clone -b daisy https://github.com/meta-qt5/meta-qt5.git
 cd ..
 
+#Configure the yocto build
+MACHINE=nitrogen6x . ./setup-environment build
+
 #Copy the yocto configuration
 cp ../../configuration_files/local.conf build/conf/
 cp ../../configuration_files/bblayers.conf build/conf/
-
-#Configure the yocto build
-MACHINE=nitrogen6x ./setup-environment build
 
 #Building the image
 bitbake core-image-weston
@@ -153,9 +156,13 @@ $projectFolder/src/webView_widget/webView_widget.pro
 #Run application with arguments: -platform wayland-egl -tty=/dev/pts/0
 
 #Add environment variable under Run Environment/Batch Edit...
+QML2_IMPORT_PATH=/usr/lib/qt5/qml
+QT_PLUGIN_PATH=/usr/lib/qt5/plugins
 QT_QPA_EGLFS_PHYSICAL_HEIGHT=480
 QT_QPA_EGLFS_PHYSICAL_WIDTH=800
 XDG_RUNTIME_DIR=/run/user/root
+QT_QPA_PLATFORM=wayland-egl
+
 
 
 
@@ -224,8 +231,9 @@ make ARCH=arm CROSS_COMPILE=/opt/poky/1.6.1/sysroots/i686-pokysdk-linux/usr/bin/
 ########################################################################################################
 
 
-
-
+export VIV_PROFILE=1
+./qwindow-compositor -platform eglfs -tty=/dev/tty1
+openvt -s -- ./qwindow-compositor --use-gl=1
 
 
 
